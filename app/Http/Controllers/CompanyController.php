@@ -57,7 +57,7 @@ class CompanyController extends Controller
             //     mkdir($destinationPath, 0755);
             // }
             $logo = uniqid() . date('YmdHis') . "." . $files->getClientOriginalExtension();
-            $files->move($destinationPath, $logo);
+            $files->move(storage_path(), $logo);
         }
 
         $company = new Company([
