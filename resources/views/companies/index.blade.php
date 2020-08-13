@@ -39,7 +39,7 @@
             <td>{{$company->name}}</td>
             <td>{{$company->email}}</td>
             <td>{{$company->website}}</td>
-            <td><img class="img-fluid" style="width: 100px" src="{{ storage_path($company->logo)}}" alt="" srcset=""></td>
+            <td><img class="img-fluid" style="width: 100px" src="{{ asset('storage/'.$company->logo)}}" alt="" srcset=""></td>
             <td>
                 <a href="{{ route('companies.edit',$company->id)}}" class="btn btn-primary">Edit</a>
             </td>
