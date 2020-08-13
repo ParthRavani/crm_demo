@@ -20,6 +20,16 @@
             {{ session()->get('success') }}
           </div>
         @endif
+        			{{-- Error Message Code --}}
+			@if(session()->has('errors'))
+			<div>
+                @foreach($errors->all() as $error)
+                <div class="alert alert-danger">
+                    {{ $error }}
+                  </div>
+				@endforeach
+			</div>
+            @endif
     </div>
   <table class="table table-striped">
     <thead>

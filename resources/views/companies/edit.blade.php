@@ -15,7 +15,7 @@
         </div>
         <br />
         @endif
-        <form method="post" action="{{ route('companies.update', $company->id) }}">
+        <form method="post" action="{{ route('companies.update', $company->id) }} " enctype="multipart/form-data">
             @method('PATCH')
             @csrf
             <div class="form-group">
@@ -37,7 +37,11 @@
 
             <div class="form-group">
                 <label for="logo">Logo:</label>
-                <input type="text" class="form-control" name="logo" value={{ $company->logo }} />
+                @if($company->logo)
+                    <img class="img-fluid" style="width: 100px" src="{{ asset('storage/'.$company->logo)}}">
+                @endif
+                <input type="file" accept="image/jpeg , image/jpg, image/gif, image/png" class="form-control" name="logo"/>
+                {{-- <input type="text" class="form-control" name="logo" value={{ $company->logo }} /> --}}
             </div>
 
             <button type="submit" class="btn btn-primary">Update</button>

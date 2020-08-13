@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Company;
+use App\Models\Employee;
+use File;
+
 
 require_once app_path() . '/Helper/CommonUtility.php';
 
@@ -51,11 +54,6 @@ class CompanyController extends Controller
         if (!isEmpty($request->logo)) {
             //save image and generate path
             $files = $request->file('logo');
-            $destinationPath = 'img/comp/'; // upload path
-            // if(!is_dir($destinationPath)){
-            //     //If Directory does not exist, then create it.
-            //     mkdir($destinationPath, 0755);
-            // }
             $logo = uniqid() . date('YmdHis') . "." . $files->getClientOriginalExtension();
             $files->move(storage_path("app/public"), $logo);
         }
@@ -104,16 +102,31 @@ class CompanyController extends Controller
     {
         $request->validate([
             'name'=>'required',
-            'email'=>'nullable|email',
+            'email'=>'email|nullable',
             'website'=>'nullable|url',
-            'logo'=>'nullable',
+            'logo'=>'image|mimes:jpeg,png,jpg,svg|dimensions:min_width=100,min_height=100',
+
         ]);
+
+        $logo= '';
+        if (!isEmpty($request->logo)) {
+            //save image and generate path
+            $files = $request->file('logo');
+            $logo = uniqid() . date('YmdHis') . "." . $files->getClientOriginalExtension();
+            $files->move(storage_path("app/public"), $logo);
+        }
+        $companyData = Company::select('logo')->where('id',$id)->get();
+        //deleting existing profile of user if new one is being uploaded
+        if (!isEmpty($companyData)) {
+            $logo_old = $companyData[0]->logo;
+            File::delete(storage_path("app/public"), $logo_old);
+        }
 
         $company = Company::find($id);
         $company->name =  $request->get('name');
         $company->email = $request->get('email');
         $company->website = $request->get('website');
-        $company->logo = $request->get('logo');
+        $company->logo = $logo;
         $company->save();
 
         return redirect('/companies')->with('success', 'Company updated!');
@@ -128,8 +141,14 @@ class CompanyController extends Controller
     public function destroy($id)
     {
         $company = Company::find($id);
-        $company->delete();
 
-        return redirect('/companies')->with('success', 'Company deleted!');
+        if(Employee::where('company_id',$id)->count()){
+
+            return redirect()->back()->withErrors('please delete company employees first.');
+        }else{
+            $company->delete();
+
+            return redirect('/companies')->with('success', 'Company deleted!');
+        }
     }
 }

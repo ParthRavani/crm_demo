@@ -1,7 +1,3 @@
-## About MPWTCS
-
-Add some desc.
-
 ## Setup Guide
 Clone/checkout from [repo](https://github.com/ParthRavani/crm_demo)
 

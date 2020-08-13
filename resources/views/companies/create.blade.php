@@ -34,14 +34,9 @@
 
           <div class="form-group">
             <label for="website">Logo:</label>
-            <input type="file" accept="image/*" class="form-control" name="logo"/>
-            {{-- <label class="custom-file-label" for="customFile">Choose file</label> --}}
+            <input type="file" accept="image/jpeg , image/jpg, image/gif, image/png" class="form-control" name="logo"/>
           </div>
-{{--
-          <div class="form-group">
-              <label for="logo">Logo:</label>
-              <input type="text" class="form-control" name="logo"/>
-          </div> --}}
+
           <br><br>
           <button type="submit" style="background-color: lightgray" class="btn btn-primary-outline">Add Company</button>
       </form>
